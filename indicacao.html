@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Indique e Ganhe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; text-align: center; padding-top: 60px; }
+    .container { background: white; padding: 40px; max-width: 420px; margin: auto; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+    h2 { color: #333; }
+    p { font-size: 16px; margin-top: 10px; }
+    .saldo { font-size: 20px; margin-top: 15px; color: #4CAF50; font-weight: bold; }
+    .botao { margin-top: 25px; padding: 12px 20px; background-color: #008CBA; color: white; text-decoration: none; border-radius: 8px; display: inline-block; }
+  </style>
+  <script>
+    let contador = 0;
+    function indicar() {
+      if (contador < 5) {
+        contador++;
+        document.getElementById('qtd').innerText = contador;
+        document.getElementById('saldo').innerText = "R$ " + (100 + contador * 50) + ",00";
+        window.open("https://wa.me/55SEUNUMERO?text=Mano%2C%20acabei%20de%20ganhar%20R%24100%20fazendo%20cadastro.%20Faz%20tamb%C3%A9m%20a%C3%AD%20que%20t%C3%A1%20pagando!", "_blank");
+      } else {
+        alert("Você atingiu o limite máximo de indicações (5).");
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>Indique amigos e ganhe + R$50 por cada!</h2>
+    <p>Você já garantiu:</p>
+    <p class="saldo" id="saldo">R$ 100,00</p>
+    <p>Indicações feitas: <span id="qtd">0</span>/5</p>
+    <a href="#" class="botao" onclick="indicar()">Indicar agora no WhatsApp</a>
+  </div>
+</body>
+</html>
