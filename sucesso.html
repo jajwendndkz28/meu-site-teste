@@ -188,6 +188,11 @@
             confetti({ particleCount: 300, spread: 80 });
             document.getElementById('final-message').style.display = 'block';
             document.getElementById('telegram-button').style.display = 'inline-block';
+
+            // Scroll automático pra baixo quando o botão aparecer
+            setTimeout(() => {
+              document.getElementById('telegram-button').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
           }, 500);
         }
       }
