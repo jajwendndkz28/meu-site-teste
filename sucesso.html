@@ -194,10 +194,10 @@
 
       const mensagem = `*Acabei de ganhar R$100* só com um cadastro rapidinho, é bem simples... *Faz aí também*, *aproveita!* Chama ele no WhatsApp 👇 e diz que veio por mim!\n\n*81999999999*`;
       const link = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
-      window.location.href = link;
-      // setTimeout(() => {
-      //   window.open(link, '_blank');
-      // }, 1150);
+      // window.location.href = link;
+      setTimeout(() => {
+        window.open(link, '_blank');
+      }, 1150);
     }
   </script>
 </body>
