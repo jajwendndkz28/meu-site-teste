@@ -154,6 +154,10 @@
       }, stepTime);
     }
 
+    function isSafariMobile() {
+      return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    }
+
     function compartilharWhatsApp() {
       document.getElementById("cash-sound").play();
 
@@ -195,9 +199,14 @@
       const mensagem = `*Acabei de ganhar R$100* só com um cadastro rapidinho, é bem simples... *Faz aí também*, *aproveita!* Chama ele no WhatsApp 👇 e diz que veio por mim!\n\n*81999999999*`;
       const link = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
       setTimeout(() => {
-        const win = window.open(link, '_blank');
-        if (!win) {
+        if (isSafariMobile()) {
+          // Safari não abre nova aba, redireciona direto
           window.location.href = link;
+        } else {
+          const win = window.open(link, '_blank');
+          if (!win) {
+            window.location.href = link;
+          }
         }
       }, 1150);
     }
