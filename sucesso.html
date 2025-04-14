@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagamento em Processamento</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; padding-top: 60px; }
+    .container { background: white; padding: 30px; max-width: 460px; margin: auto; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+    .saldo { font-size: 22px; font-weight: bold; color: green; }
+    .botao { background: #008CBA; color: white; padding: 14px 20px; border-radius: 10px; text-decoration: none; display: inline-block; margin-top: 20px; font-size: 16px; cursor: pointer; }
+    .meta { font-weight: bold; font-size: 18px; margin-top: 15px; color: #ff6600; }
+    .indicacoes { font-size: 20px; margin-top: 10px; }
+    .indicacoes span { color: #008CBA; font-weight: bold; }
+    .saldo-verde { color: green; font-size: 22px; font-weight: bold; }
+    .progress-bar {
+      width: 100%;
+      background-color: #eee;
+      border-radius: 8px;
+      margin-top: 20px;
+      overflow: hidden;
+      position: relative;
+      height: 20px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background-color: #4CAF50;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+      position: relative;
+    }
+    .progress-bar-text {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-right: 4px;
+      font-size: 13px;
+      line-height: 20px;
+      color: #fff;
+      font-weight: bold;
+    }
+    #final-message {
+      display: none;
+      background: #fff7cc;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #333;
+    }
+    #telegram-button {
+      display: none;
+      background-color: #0088cc;
+      color: white;
+      padding: 12px 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>✅ Sua chave Pix foi registrada com sucesso!</h2>
+    <p>O pagamento será liberado em até <strong>24 horas úteis</strong>.</p>
+
+    <p><strong>🎉 Você já garantiu:</strong></p>
+    <p><span class="saldo-verde" id="saldo">R$ 100,00</span></p>
+
+    <p><strong>🚀 Indique amigos e ganhe mais <span style="color: #008CBA; font-weight: bold;">R$ 50</span> por cada um!</strong></p>
+
+    <div class="indicacoes">
+      <p><strong>Indicações feitas:</strong> <span id="qtd">0/5</span></p>
+      <p class="meta"><strong>💸 Meta:</strong> 5 indicações para aumentar seu saldo!</p>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progress-fill">
+          <div class="progress-bar-text" id="progress-percent">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <a class="botao" id="whatsapp-button" onclick="compartilharWhatsApp()">Indicar agora no WhatsApp</a>
+
+    <div id="final-message">
+      🎉 Você atingiu o limite máximo de R$500,00! <br>
+      Para liberar seu pagamento, entre em contato com nossa equipe no Telegram.
+    </div>
+    <a id="telegram-button" href="https://t.me/seu_grupo_ou_contato" target="_blank">💬 Falar com Suporte no Telegram</a>
+  </div>
+
+  <audio id="cash-sound" preload="auto">
+    <source src="assets/cash-register.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    window.onload = () => {
+      confetti({ particleCount: 200, spread: 60, origin: { y: 0.6 } });
+
+      // Carregar dados salvos do localStorage
+      const savedIndications = localStorage.getItem('indications') || 0;
+      const savedBalance = parseFloat(localStorage.getItem('balance')) || 100;
+      const savedProgress = parseInt(localStorage.getItem('progress')) || 0;
+
+      indicacoes = savedIndications;
+      saldo = savedBalance;
+
+      document.getElementById('saldo').textContent = `R$ ${formatarReal(saldo)}`;
+      document.getElementById('qtd').textContent = `${indicacoes}/5`;
+
+      // Atualiza a barrinha de progresso
+      const progresso = Math.min((indicacoes / 5) * 100, 100);
+      document.getElementById('progress-fill').style.width = progresso + '%';
+      document.getElementById('progress-percent').textContent = `${Math.round(progresso)}%`;
+
+      // Se já atingiu o limite, esconder o botão
+      if (indicacoes >= 5) {
+        document.getElementById('whatsapp-button').style.display = 'none';
+        document.getElementById('final-message').style.display = 'block';
+        document.getElementById('telegram-button').style.display = 'inline-block';
+      }
+    };
+
+    let saldo = 100;
+    let indicacoes = 0;
+    const metaVisual = 5;
+    const limiteMaximo = 8;
+    const valorPorIndicacao = 50;
+
+    function formatarReal(valor) {
+      return valor.toFixed(2).replace('.', ',');
+    }
+
+    function animarContagem(valorAntigo, valorNovo, callback) {
+      let start = valorAntigo;
+      const end = valorNovo;
+      const duration = 800;
+      const stepTime = 20;
+      const steps = Math.ceil(duration / stepTime);
+      const increment = (end - start) / steps;
+      let currentStep = 0;
+
+      const interval = setInterval(() => {
+        start += increment;
+        currentStep++;
+        if (currentStep >= steps) {
+          clearInterval(interval);
+          start = end;
+        }
+        document.getElementById('saldo').textContent = `R$ ${formatarReal(start)}`;
+        if (currentStep >= steps && callback) callback();
+      }, stepTime);
+    }
+
+    function compartilharWhatsApp() {
+      document.getElementById("cash-sound").play();
+
+      if (indicacoes < limiteMaximo) {
+        indicacoes++;
+        let saldoAnterior = saldo;
+        saldo += valorPorIndicacao;
+        animarContagem(saldoAnterior, saldo);
+
+        document.getElementById('qtd').textContent = `${indicacoes}/${metaVisual}`;
+
+        const progresso = Math.min((indicacoes / limiteMaximo) * 100, 100);
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-percent');
+
+        progressFill.style.width = progresso + '%';
+        progressText.textContent = `${Math.round(progresso)}%`;
+
+        // Alinha a % ao fim da barrinha
+        progressText.style.marginLeft = 'auto';
+        progressText.style.marginRight = '4px';
+
+        // Salvar as alterações no localStorage
+        localStorage.setItem('indications', indicacoes);
+        localStorage.setItem('balance', saldo);
+        localStorage.setItem('progress', progresso);
+
+        if (indicacoes >= limiteMaximo) {
+          document.getElementById('whatsapp-button').style.display = 'none';
+
+          setTimeout(() => {
+            confetti({ particleCount: 300, spread: 80 });
+            document.getElementById('final-message').style.display = 'block';
+            document.getElementById('telegram-button').style.display = 'inline-block';
+          }, 500);
+        }
+      }
+
+      const mensagem = `*Acabei de ganhar R$100* só com um cadastro rapidinho, é bem simples... *Faz aí também*, *aproveita!* Chama ele no WhatsApp 👇 e diz que veio por mim!\n\n*81999999999*`;
+      const isMobile = /iPhone|Android/i.test(navigator.userAgent);
+      const link = isMobile 
+        ? `whatsapp://send?text=${encodeURIComponent(mensagem)}` 
+        : `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+
+      setTimeout(() => {
+        window.open(link, '_blank');
+      }, 1150);
+    }
+  </script>
+</body>
+</html>
