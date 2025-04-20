@@ -198,12 +198,12 @@
       }
 
       const mensagem = `*Acabei de ganhar R$100* só com um cadastro rapidinho, é bem simples... *Faz aí também*, *aproveita!* Chama ele no WhatsApp 👇 e diz que veio por mim!\n\n*81997177611*`;
-      // const link = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+      const link = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
 
-      const isMobile = /iPhone|Android|iPad/i.test(navigator.userAgent);
-      const link = isMobile
-        ? `whatsapp://send?text=${encodeURIComponent(mensagem)}`
-        : `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+      // const isMobile = /iPhone|Android|iPad/i.test(navigator.userAgent);
+      // const link = isMobile
+      //   ? `whatsapp://send?text=${encodeURIComponent(mensagem)}`
+      //   : `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
       setTimeout(() => {
       const win = window.open(link, '_blank');
         if (!win) {
