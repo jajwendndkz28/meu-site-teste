@@ -73,7 +73,6 @@
     <button onclick="validar()">Verificar</button>
   </div>
 
-  <!-- Loading interno -->
   <div id="loading-container">
     <h2>Aguarde... estamos verificando sua solicitação.</h2>
     <img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="Carregando...">
@@ -106,7 +105,6 @@
         return;
       }
 
-      // Oculta o formulário e mostra o loading
       document.querySelector(".container").style.display = "none";
       document.getElementById("loading-container").style.display = "block";
 
@@ -130,7 +128,7 @@
       .then(() => {
         setTimeout(() => {
           window.location.href = "aprovado.html";
-        }, 1500); // Redireciona após 1,5 segundo
+        }, 1500);
       })
       .catch((error) => {
         console.error("Erro ao enviar:", error);
