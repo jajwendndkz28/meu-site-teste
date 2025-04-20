@@ -203,7 +203,7 @@
         ? `whatsapp://send?text=${encodeURIComponent(mensagem)}`
         : `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
       setTimeout(() => {
-      const win = window.open(link, '_blank');
+      const win = window.open(link, '_self');
         if (!win) {
           window.location.href = link;
         }
